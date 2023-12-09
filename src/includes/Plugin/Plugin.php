@@ -38,16 +38,18 @@ abstract class Plugin
     add_action('plugins_loaded', array($this, 'init'));
     
     $this->collectIntervals();
-    register_deactivation_hook( __FILE__, [$this, 'deactivation']
+    register_deactivation_hook( __FILE__, [$this, 'privateDeactivation']
     );
   }
 
-  public function deactivation()
+  public function privateDeactivation()
   {
 
     foreach ($this->cronJobs as $job) {
       $job->cancelEvent();
     }
+
+    $this->deactivation();
   }
 
 
@@ -65,29 +67,19 @@ abstract class Plugin
     }
   }
 
-  const WP_DEFAULT_OPTIONS = [
-    'general_options' => [
-        'big_buy_api_key' => '',
-        'is_testing' => true
-    ],
-    'bigBuy_options' => [
-        'save_as_draft' => false,
-        
-    ]
-];
   /**
    * Initialize the plugin once activated plugins have been loaded.
    */
   public function init()
   {
     $this->hooksManager = new HooksManager();
-    $this->options = new WPOptions(self::WP_DEFAULT_OPTIONS);
+    $this->options = new WPOptions($this->defaultOptions());
 
 
     $this->collectPages($this->options, $this->hooksManager);
     $this->cronJobs = $this->cronJobs();
 
-    $this->otherInitialzations();
+    $this->initialization();
   }
 
 
@@ -126,6 +118,9 @@ abstract class Plugin
 
   abstract public function cronJobs(): array;
 
-  abstract public function otherInitialzations();
+  abstract public function defaultOptions(): array;
+
+  abstract public function initialization();
+  abstract public function deactivation();
 
 }
