@@ -1,15 +1,16 @@
 <?php
-namespace CoffeePlugins\BolWpPlugin;
+namespace CoffeePlugins\Framework;
 
-use CoffeePlugins\BolWpPlugin\Options\WP_Options;
+use CoffeePlugins\Framework\Options\WPOptions;
+use CoffeePlugins\Framework\Plugin\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-require_once __DIR__ . '/includes/Options/WP_Options.php';
+require_once __DIR__ . '/src/includes/Options/WPOptions.php';
 
-foreach ( WP_Options::get_option_keys() as $option_key ) {
-    $db_option_name = 'prsdm_limit_login_attempts_' . $option_key;
+foreach ( WPOptions::get_option_keys() as $option_key ) {
+    $db_option_name = Plugin::prefix() . '_' . $option_key;
     delete_option( $db_option_name );
 }

@@ -1,0 +1,16 @@
+{
+    "name": "coffeeplugins/wp-framework",
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Coffeeplugins\\WpFramework\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Hylke Reinders",
+            "email": "hylkereinders@gmail.com"
+        }
+    ],
+    "require": {}
+}
